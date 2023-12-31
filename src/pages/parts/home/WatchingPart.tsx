@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { EditButton } from "@/components/buttons/EditButton";
 import { Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
-import { MediaGrid } from "@/components/media/MediaGrid";
+import { MediaList } from "@/components/media/MediaList";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useProgressStore } from "@/stores/progress";
@@ -49,16 +49,17 @@ export function WatchingPart() {
       >
         <EditButton editing={editing} onEdit={setEditing} />
       </SectionHeading>
-      <MediaGrid ref={gridRef}>
+      <MediaList ref={gridRef}>
         {sortedProgressItems.map((v) => (
-          <WatchedMediaCard
-            key={v.id}
-            media={v}
-            closable={editing}
-            onClose={() => removeItem(v.id)}
-          />
+          <div key={v.id} className="flex-1 max-w-[150px] min-w-[150px]">
+            <WatchedMediaCard
+              media={v}
+              closable={editing}
+              onClose={() => removeItem(v.id)}
+            />
+          </div>
         ))}
-      </MediaGrid>
+      </MediaList>
     </div>
   );
 }

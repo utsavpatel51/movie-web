@@ -269,3 +269,41 @@ export function formatTMDBSearchResult(
     object_type: mediatype,
   };
 }
+
+export async function getRecommendationFromId(
+  type: MWMediaType,
+  id: string,
+): Promise<MediaItem[] | null> {
+  const tmdbType = mediaTypeToTMDB(type);
+  if (tmdbType === TMDBContentTypes.MOVIE) {
+    const movieData = await get<{
+      results: MediaDetailReturn<typeof tmdbType>[];
+    }>(`/movie/${id}/recommendations`);
+    if (!movieData) return null;
+
+    return movieData.results.map((v) => ({
+      type: "movie",
+      id: v.id.toString(),
+      title: v.title,
+      poster: getMediaPoster(v.poster_path) ?? undefined,
+      year: new Date(v.release_date).getFullYear(),
+    }));
+  }
+
+  if (tmdbType === TMDBContentTypes.TV) {
+    const showData = await get<{
+      results: MediaDetailReturn<typeof tmdbType>[];
+    }>(`/tv/${id}/recommendations`);
+    if (!showData) return null;
+
+    return showData.results.map((v) => ({
+      type: "show",
+      id: v.id.toString(),
+      title: v.name,
+      poster: getMediaPoster(v.poster_path) ?? undefined,
+      year: new Date(v.first_air_date).getFullYear(),
+    }));
+  }
+
+  throw new Error("Invalid media type");
+}

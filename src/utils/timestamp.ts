@@ -9,6 +9,14 @@ export function parseTimestamp(str: string | undefined | null): number | null {
   const minutes = Math.min(timeArr[1] ?? 0, 59);
   const seconds = Math.min(timeArr[0] ?? 0, minutes > 0 ? 59 : Infinity);
 
-  const timeInSeconds = hours * 60 * 60 + minutes * 60 + seconds;
-  return timeInSeconds;
+  return hours * 60 * 60 + minutes * 60 + seconds;
+}
+
+// 1972-03-14 -> March 14, 1972
+export function formatDate(date: string): string {
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }

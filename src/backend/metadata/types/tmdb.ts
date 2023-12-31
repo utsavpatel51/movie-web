@@ -24,6 +24,22 @@ export type TMDBMediaResult = {
   seasons?: TMDBSeasonShort[];
 };
 
+export type TMDBMediaDetail = TMDBMediaResult & {
+  genres: string[];
+  overview: string | null;
+  release_date?: string;
+  status: string;
+  tagline: string | null;
+  vote_average: number;
+  vote_count: number;
+  number_of_seasons?: number;
+  number_of_episodes?: number;
+  runtime?: number | null;
+  last_air_date?: string;
+  first_air_date?: string;
+  next_episode_to_air?: string;
+};
+
 export type TMDBSeasonMetaResult = {
   title: string;
   id: string;
