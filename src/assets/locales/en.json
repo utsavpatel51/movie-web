@@ -101,6 +101,9 @@
     }
   },
   "home": {
+    "recommendations": {
+      "sectionTitle": "Recommendations"
+    },
     "bookmarks": {
       "sectionTitle": "Bookmarks"
     },

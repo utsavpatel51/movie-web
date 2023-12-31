@@ -19,7 +19,7 @@ import {
 import { MWMediaMeta, MWMediaType } from "./types/mw";
 import {
   TMDBContentTypes,
-  TMDBMediaResult,
+  TMDBMediaDetail,
   TMDBMovieData,
   TMDBSeasonMetaResult,
   TMDBShowData,
@@ -35,15 +35,24 @@ export interface DetailedMeta {
 export function formatTMDBMetaResult(
   details: TMDBShowData | TMDBMovieData,
   type: MWMediaType,
-): TMDBMediaResult {
+): TMDBMediaDetail {
   if (type === MWMediaType.MOVIE) {
     const movie = details as TMDBMovieData;
+
     return {
       id: details.id,
       title: movie.title,
       object_type: mediaTypeToTMDB(type),
       poster: getMediaPoster(movie.poster_path) ?? undefined,
       original_release_year: new Date(movie.release_date).getFullYear(),
+      release_date: movie.release_date,
+      genres: movie.genres?.map((g) => g.name),
+      overview: movie.overview,
+      status: movie.status,
+      tagline: movie.tagline,
+      runtime: movie.runtime,
+      vote_average: movie.vote_average,
+      vote_count: movie.vote_count,
     };
   }
   if (type === MWMediaType.SERIES) {
@@ -52,13 +61,24 @@ export function formatTMDBMetaResult(
       id: details.id,
       title: show.name,
       object_type: mediaTypeToTMDB(type),
-      seasons: show.seasons.map((v) => ({
+      seasons: show.seasons?.map((v) => ({
         id: v.id,
         season_number: v.season_number,
         title: v.name,
       })),
       poster: getMediaPoster(show.poster_path) ?? undefined,
       original_release_year: new Date(show.first_air_date).getFullYear(),
+      genres: show.genres?.map((g) => g.name),
+      overview: show.overview,
+      status: show.status,
+      tagline: show.tagline,
+      vote_average: show.vote_average,
+      vote_count: show.vote_count,
+      number_of_seasons: show.number_of_seasons,
+      number_of_episodes: show.number_of_episodes,
+      last_air_date: show.last_air_date,
+      next_episode_to_air: show.next_episode_to_air?.air_date,
+      first_air_date: show.first_air_date,
     };
   }
 
@@ -111,6 +131,13 @@ export async function getMetaFromId(
     imdbId,
     tmdbId: id,
   };
+}
+
+export async function getDetailsFromId(type: MWMediaType, id: string) {
+  const details = await getMediaDetails(id, mediaTypeToTMDB(type));
+  if (!details) return null;
+
+  return formatTMDBMetaResult(details, type);
 }
 
 export async function getLegacyMetaFromId(

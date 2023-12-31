@@ -23,3 +23,12 @@ export function formatSeconds(secs: number, showHours = false): string {
 export function durationExceedsHour(secs: number): boolean {
   return secs > 60 * 60;
 }
+
+export function convertMinuteToReadableTime(
+  minute?: number | null,
+): string | null {
+  if (!minute) return null;
+  const hours = Math.floor(minute / 60);
+  const minutes = minute % 60;
+  return `${hours}h ${minutes}m`;
+}

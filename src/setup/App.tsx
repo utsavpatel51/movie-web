@@ -20,16 +20,16 @@ import { NotFoundPage } from "@/pages/errors/NotFoundPage";
 import { HomePage } from "@/pages/HomePage";
 import { LoginPage } from "@/pages/Login";
 import { RegisterPage } from "@/pages/Register";
+import { WatchPage } from "@/pages/WatchPage";
 import { Layout } from "@/setup/Layout";
 import { useHistoryListener } from "@/stores/history";
 import { LanguageProvider } from "@/stores/language";
 
 const DeveloperPage = lazy(() => import("@/pages/DeveloperPage"));
 const TestView = lazy(() => import("@/pages/developer/TestView"));
-const PlayerView = lazyWithPreload(() => import("@/pages/PlayerView"));
+
 const SettingsPage = lazyWithPreload(() => import("@/pages/Settings"));
 
-PlayerView.preload();
 SettingsPage.preload();
 
 function LegacyUrlView({ children }: { children: ReactElement }) {
@@ -99,7 +99,7 @@ function App() {
           element={
             <LegacyUrlView>
               <Suspense fallback={null}>
-                <PlayerView />
+                <WatchPage />
               </Suspense>
             </LegacyUrlView>
           }
@@ -109,7 +109,7 @@ function App() {
           element={
             <LegacyUrlView>
               <Suspense fallback={null}>
-                <PlayerView />
+                <WatchPage />
               </Suspense>
             </LegacyUrlView>
           }
